@@ -20,7 +20,13 @@ $$('[data-copy]').forEach(b=>b.addEventListener('click',async()=>{
   setTimeout(()=>{b.textContent='Copy';b.classList.remove('done')},2200);
 }));
 // nav shadow
-const nav=$('.nav');nav&&addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>10),{passive:true});
+const nav=$('.nav');const tg=$('.nav-toggle');
+if(tg){const setOpen=o=>{nav.classList.toggle('open',o);tg.setAttribute('aria-expanded',o);tg.setAttribute('aria-label',o?'Close menu':'Open menu')};
+ tg.addEventListener('click',()=>setOpen(!nav.classList.contains('open')));
+ $$('#navMenu a').forEach(a=>a.addEventListener('click',()=>setOpen(false)));
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.classList.contains('open')){setOpen(false);tg.focus()}});
+ addEventListener('resize',()=>{if(innerWidth>560)setOpen(false)});}
+nav&&addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>10),{passive:true});
 
 // videos: load + play only while visible
 const vids=$$('video[data-src]');
